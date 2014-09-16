@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "csv": {
+      "version": "0.4.0",
+      "dependencies": {
+        "csv-generate": {
+          "version": "0.0.4"
+        },
+        "csv-parse": {
+          "version": "0.0.6"
+        },
+        "stream-transform": {
+          "version": "0.0.6"
+        },
+        "csv-stringify": {
+          "version": "0.0.3"
+        }
+      }
+    }
+  }
+}

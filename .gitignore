@@ -1,0 +1,4 @@
+.meteor-spk
+*.spk
+settings.json
+.meteor/local
