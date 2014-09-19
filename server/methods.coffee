@@ -11,23 +11,39 @@ Future = Npm.require('fibers/future')
 
   return fut.wait()
 
-fetch = (collection, start, end) ->
-  data = collection.find().fetch()
-  # TODO: filter
-  # TODO: resample based on timestamp
+fetch = (collection, start, end, resample) ->
+  res = []
+  nextTimestamp = 0
 
-  if data.length
+  if resample
+  # TODO: filter
+    raw = collection.find({}, {sort: {timestamp: 1}}).forEach (doc) ->
+      time = doc.timestamp.getTime()
+
+      if time > nextTimestamp
+        if nextTimestamp == 0
+          nextTimestamp = time
+        else
+          while nextTimestamp < time
+            nextTimestamp += resample
+        res.push doc
+
+  else
+    res = collection.find({}, {sort: {timestamp: 1}}).fetch()
+
+  if res.length
     newData = {}
-    for key in data[0]
+    keys = Object.keys(res[0])
+    for key in keys
       newData[key] = []
 
-    for row in data
-      for key in newData
-        row[key].push row[key]
+    for row in res
+      for key in keys
+        newData[key].push row[key]
 
-    data = newData
+    res = newData
 
-  return data
+  return res
 
 fetchLatest = (collection) ->
   return collection.findOne({}, {sort: {$natural: -1 }, limit: 1})
@@ -73,26 +89,26 @@ Meteor.methods
 
     return fetchLatest(GithubData)
 
-  fetchTwitter: (start, end) ->
+  fetchTwitter: (start, end, resample) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(TwitterData, start, end)
+    return fetch(TwitterData, start, end, resample)
 
-  fetchMailchimp: (start, end) ->
+  fetchMailchimp: (start, end, resample) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(MailchimpData, start, end)
+    return fetch(MailchimpData, start, end, resample)
 
-  fetchGoogle: (start, end) ->
+  fetchGoogle: (start, end, resample) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(GoogleData, start, end)
+    return fetch(GoogleData, start, end, resample)
 
-  fetchGithub: (start, end) ->
+  fetchGithub: (start, end, resample) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(GithubData, start, end)
+    return fetch(GithubData, start, end, resample)

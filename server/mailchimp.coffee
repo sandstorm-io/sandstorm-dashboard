@@ -8,7 +8,14 @@ URL = "https://#{DATACENTER}.api.mailchimp.com/2.0"
       apikey: KEY
 
   # TODO: check status code
-  return JSON.parse(data.content).data[0]
+  res = JSON.parse(data.content).data[0]
+  if res?.stats
+    for key in Object.keys(res.stats)
+      res["stats_#{key}"] = res.stats[key]
+
+    delete res["stats"]
+
+  return res
 
 @startMailchimpTimer = ->
   insert = ->

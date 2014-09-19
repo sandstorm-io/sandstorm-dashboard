@@ -3,7 +3,12 @@ meteorPlugin = (settings, updateCallback) ->
   getData = ->
     source = currentSettings.source_name
     source = source.charAt(0).toUpperCase() + source.slice(1);
-    Meteor.call "fetch#{source}", (err, data) ->
+
+    if currentSettings.single_result
+      methodName = "fetchLatest#{source}"
+    else
+      methodName = "fetch#{source}"
+    Meteor.call methodName, (err, data) ->
       if err
         console.log err
       else
@@ -51,6 +56,12 @@ meteorPlugin = (settings, updateCallback) ->
         type: "text"
         description: "The name of the data source to use. Must be twitter|mailchimp|google|github"
         default_value: 'twitter'
+      }
+      {
+        name: "single_result"
+        display_name: "Return Only Latest"
+        type: "boolean"
+        description: "Should we return only the latest data"
       }
       {
         name: "refresh_time"

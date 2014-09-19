@@ -2,6 +2,7 @@ Template.home.rendered = ->
    head.js "js/freeboard+plugins.min.js", =>
     $ =>
       loadMeteorPlugin()
+      loadGraphWidget()
 
       freeboard.initialize true, =>
         theFreeboardModel.loadDashboard(@data)
