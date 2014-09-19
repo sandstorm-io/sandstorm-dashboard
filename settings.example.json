@@ -1,0 +1,16 @@
+{
+  "twitter": {
+    "key": "FILLME",
+    "secret": "FILLME"
+  },
+  "mailchimp": {
+    "key": "FILLME"
+  },
+  "google": {
+    "private_key_id": "FILLME",
+    "private_key": "FILLME",
+    "client_id": "FILLME",
+    "type": "service_account",
+    "view_id": "FILLME"
+  }
+}
