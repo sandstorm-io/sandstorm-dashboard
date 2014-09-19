@@ -14,3 +14,7 @@ Meteor.startup ->
     Accounts.sendEnrollmentEmail user
     user = Meteor.users.findOne()
     Meteor.users.update({_id: user._id}, {'$set': {permissions: ['admin']}})
+
+  twitterUser = Meteor.users.findOne({'profile.isTwitterSetup': true})
+  if twitterUser
+    startTwitterTimer(twitterUser.services.twitter)

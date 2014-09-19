@@ -1,11 +1,12 @@
-myDatasourcePlugin = (settings, updateCallback) ->
+twitterPlugin = (settings, updateCallback) ->
   # This is some function where I'll get my data from somewhere
   getData = ->
-    newData = hello: Math.random()
-    # Get my data from somewhere and populate newData with it... Probably a JSON API or something.
+    Meteor.call 'fetchTwitter', (err, data) ->
+      if err
+        console.log err
+      else
+        updateCallback data
 
-    # ...
-    updateCallback newData
     return
   createRefreshTimer = (interval) ->
     clearInterval refreshTimer  if refreshTimer
@@ -42,19 +43,12 @@ myDatasourcePlugin = (settings, updateCallback) ->
   createRefreshTimer currentSettings.refresh_time
   return
 
-@loadExamplePlugin = ->
+@loadTwitterPlugin = ->
   freeboard.loadDatasourcePlugin
-    type_name: "my_datasource_plugin"
-    display_name: "Datasource Plugin Example"
-    description: "Some sort of description <strong>with optional html!</strong>"
+    type_name: "twitter_plugin"
+    display_name: "Twitter"
+    description: "This is a data source for twitter data"
     settings: [
-      {
-        name: "past_time"
-        display_name: "Historical Time To Display"
-        type: "text"
-        description: "In milliseconds"
-        default_value: 500000
-      }
       {
         name: "refresh_time"
         display_name: "Refresh Time"
@@ -64,6 +58,6 @@ myDatasourcePlugin = (settings, updateCallback) ->
       }
     ]
     newInstance: (settings, newInstanceCallback, updateCallback) ->
-      newInstanceCallback new myDatasourcePlugin(settings, updateCallback)
+      newInstanceCallback new twitterPlugin(settings, updateCallback)
       return
 
