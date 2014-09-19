@@ -1,7 +1,9 @@
-twitterPlugin = (settings, updateCallback) ->
+meteorPlugin = (settings, updateCallback) ->
   # This is some function where I'll get my data from somewhere
   getData = ->
-    Meteor.call 'fetchTwitter', (err, data) ->
+    source = currentSettings.source_name
+    source = source.charAt(0).toUpperCase() + source.slice(1);
+    Meteor.call "fetch#{source}", (err, data) ->
       if err
         console.log err
       else
@@ -9,6 +11,7 @@ twitterPlugin = (settings, updateCallback) ->
 
     return
   createRefreshTimer = (interval) ->
+    interval = interval * 1000
     clearInterval refreshTimer  if refreshTimer
     refreshTimer = setInterval(->
       getData()
@@ -33,31 +36,31 @@ twitterPlugin = (settings, updateCallback) ->
     refreshTimer = `undefined`
     return
 
-  Meteor.setTimeout(->
-    current_time = currentSettings.past_time
-    while current_time > 0
-      self.updateNow()
-      current_time -= currentSettings.refresh_time
-  , 3000)
-
   createRefreshTimer currentSettings.refresh_time
   return
 
-@loadTwitterPlugin = ->
+@loadMeteorPlugin = ->
   freeboard.loadDatasourcePlugin
-    type_name: "twitter_plugin"
-    display_name: "Twitter"
-    description: "This is a data source for twitter data"
+    type_name: "meteor_plugin"
+    display_name: "Meteor Data"
+    description: "This is a data source for meteor collections"
     settings: [
+      {
+        name: "source_name"
+        display_name: "Source Name"
+        type: "text"
+        description: "The name of the data source to use. Must be twitter|mailchimp|google|github"
+        default_value: 'twitter'
+      }
       {
         name: "refresh_time"
         display_name: "Refresh Time"
         type: "text"
-        description: "In milliseconds"
-        default_value: 5000
+        description: "In seconds"
+        default_value: 300
       }
     ]
     newInstance: (settings, newInstanceCallback, updateCallback) ->
-      newInstanceCallback new twitterPlugin(settings, updateCallback)
+      newInstanceCallback new meteorPlugin(settings, updateCallback)
       return
 

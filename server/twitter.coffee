@@ -13,6 +13,8 @@ TwitterBinding = (key, secret) ->
   binding = TwitterBinding(Meteor.settings.twitter.key, Meteor.settings.twitter.secret)
 
   data = wrappedGet(binding, "https://api.twitter.com/1.1/users/lookup.json?screen_name=#{username}", creds)
+
+  # TODO: handle error
   return JSON.parse(data)[0]
 
 @startTwitterTimer = (creds) ->

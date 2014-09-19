@@ -1,16 +1,5 @@
 Future = Npm.require('fibers/future')
 
-@TwitterBinding = (key, secret) ->
-  return new oauth.OAuth(
-    'https://api.twitter.com/oauth/request_token',
-    'https://api.twitter.com/oauth/access_token',
-    key,
-    secret,
-    '1.0A',
-    null,
-    'HMAC-SHA1'
-  )
-
 # Meteor._wrapAsync fails for some reason
 @wrappedGet = (binding, url, creds) ->
   fut = new Future()
@@ -37,10 +26,16 @@ Meteor.methods
     data = OauthRetrieveCredential(credentialToken, credentialSecret)
     options = data.serviceData
     Meteor.users.update {_id: Meteor.userId()}, {'$set': {'profile.isTwitterSetup': true, 'services.twitter': options}}
-    startTwitterTimer()
+    startTwitterTimer(options)
 
   fetchTwitter: (username) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return TwitterData.findOne()
+
+  fetchMailchimp: ->
+    unless isAdmin(Meteor.userId())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    return getMailchimp()

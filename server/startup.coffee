@@ -18,3 +18,5 @@ Meteor.startup ->
   twitterUser = Meteor.users.findOne({'profile.isTwitterSetup': true})
   if twitterUser
     startTwitterTimer(twitterUser.services.twitter)
+
+  startMailchimpTimer()
