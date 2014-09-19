@@ -2,7 +2,7 @@ KEY = Meteor.settings.mailchimp.key
 DATACENTER = KEY.substring(KEY.lastIndexOf("-") + 1)
 URL = "https://#{DATACENTER}.api.mailchimp.com/2.0"
 
-@getMailchimpList = ->
+@getMailchimp = ->
   data = Meteor.http.post "#{URL}/lists/list",
     data:
       apikey: KEY
@@ -12,7 +12,7 @@ URL = "https://#{DATACENTER}.api.mailchimp.com/2.0"
 
 @startMailchimpTimer = ->
   insert = ->
-    data = getMailchimpList()
+    data = getMailchimp()
     data.timestamp = new Date()
     MailchimpData.insert(data)
 
