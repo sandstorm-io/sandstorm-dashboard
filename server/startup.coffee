@@ -20,3 +20,5 @@ Meteor.startup ->
     startTwitterTimer(twitterUser.services.twitter)
 
   startMailchimpTimer()
+  startGithubTimer()
+  startGoogleTimer()
