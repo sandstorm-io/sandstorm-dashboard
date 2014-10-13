@@ -22,3 +22,4 @@ Meteor.startup ->
   startMailchimpTimer()
   startGithubTimer()
   startGoogleTimer()
+  startSandstormTimer()

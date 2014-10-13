@@ -11,7 +11,7 @@ Future = Npm.require('fibers/future')
 
   return fut.wait()
 
-fetch = (collection, start, end, resample) ->
+fetch = (collection, start, end, resample, sum_during_sample) ->
   res = []
   nextTimestamp = 0
 
@@ -112,3 +112,9 @@ Meteor.methods
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(GithubData, start, end, resample)
+
+  fetchSandstorm: (start, end, resample) ->
+    unless isAdmin(Meteor.userId())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    return fetch(SandstormData, start, end, resample)

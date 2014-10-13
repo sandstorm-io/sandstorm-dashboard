@@ -12,5 +12,8 @@
     "client_id": "FILLME",
     "type": "service_account",
     "view_id": "FILLME"
+  },
+  "sandstorm": {
+    "statsUrl": "https://MY_URL/fetchStats/MY_TOKEN"
   }
 }
