@@ -15,5 +15,6 @@
   },
   "sandstorm": {
     "statsUrl": "https://MY_URL/fetchStats/MY_TOKEN"
-  }
+  },
+  "logToken": "FILL_WITH_RANDOM_ALPHANUMERIC_CHARACTERS"
 }

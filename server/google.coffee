@@ -7,7 +7,7 @@ jwt.authorize (err, result) ->
   if err
     console.log err
     return
-wrappedGA = Meteor._wrapAsync((dimensions, func) ->
+wrappedGA = Meteor.wrapAsync((dimensions, func) ->
   analytics.data.ga.get
     auth: jwt
     dimensions: dimensions

@@ -89,6 +89,12 @@ Meteor.methods
 
     return fetchLatest(GithubData)
 
+  fetchLatestLog: ->
+    unless isAdmin(Meteor.userId())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    return fetchLatest(LogData)
+
   fetchTwitter: (start, end, resample) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
@@ -118,3 +124,9 @@ Meteor.methods
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(SandstormData, start, end, resample)
+
+  fetchLog: (start, end, resample) ->
+    unless isAdmin(Meteor.userId())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    return fetch(LogData, start, end, resample)

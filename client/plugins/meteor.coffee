@@ -54,7 +54,7 @@ meteorPlugin = (settings, updateCallback) ->
         name: "source_name"
         display_name: "Source Name"
         type: "text"
-        description: "The name of the data source to use. Must be twitter|mailchimp|google|github"
+        description: "The name of the data source to use. Must be twitter|mailchimp|google|github|sandstorm|log"
         default_value: 'twitter'
       }
       {
