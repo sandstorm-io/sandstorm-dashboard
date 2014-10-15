@@ -4,9 +4,8 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-iron-router
-spin
-iron-router-progress
+iron:router
+sacha:spin
 accounts-password
 coffeescript
 stylus
@@ -14,4 +13,4 @@ npm-imports
 twitter
 oauth-helper
 accounts-ui
-fontawesome4
+chrismbeckett:fontawesome4
