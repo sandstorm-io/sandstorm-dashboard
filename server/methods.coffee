@@ -49,6 +49,10 @@ fetch = (collection, start, end, resample, sum, options) ->
       for key in keys
         newData[key].push row[key]
 
+    if collection == LogData
+      newData['timestamp'] = _.map newData['timestamp'], (val) ->
+        return new Date(val)
+
     if sum
       for key in keys
         first = newData[key][0]
