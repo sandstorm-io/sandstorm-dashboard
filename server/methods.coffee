@@ -11,13 +11,17 @@ Future = Npm.require('fibers/future')
 
   return fut.wait()
 
-fetch = (collection, start, end, resample, sum_during_sample) ->
+fetch = (collection, start, end, resample, options) ->
   res = []
   nextTimestamp = 0
+  options = options || {}
+
+  if (not options.sort)
+    options.sort = {timestamp: 1}
 
   if resample
   # TODO: filter
-    raw = collection.find({}, {sort: {timestamp: 1}}).forEach (doc) ->
+    raw = collection.find({}, options).forEach (doc) ->
       time = doc.timestamp.getTime()
 
       if time > nextTimestamp
@@ -29,7 +33,7 @@ fetch = (collection, start, end, resample, sum_during_sample) ->
         res.push doc
 
   else
-    res = collection.find({}, {sort: {timestamp: 1}}).fetch()
+    res = collection.find({}, options).fetch()
 
   if res.length
     newData = {}
@@ -99,7 +103,7 @@ Meteor.methods
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(TwitterData, start, end, resample)
+    return fetch(TwitterData, start, end, resample, {fields: {timestamp: 1, followers_count: 1, statuses_count: 1}})
 
   fetchMailchimp: (start, end, resample) ->
     unless isAdmin(Meteor.userId())
