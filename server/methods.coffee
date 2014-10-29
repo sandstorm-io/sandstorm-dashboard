@@ -1,5 +1,8 @@
 Future = Npm.require('fibers/future')
 
+isNumber = (n) ->
+  return !isNaN(parseFloat(n)) && isFinite(n)
+
 # Meteor._wrapAsync fails for some reason
 @wrappedGet = (binding, url, creds) ->
   fut = new Future()
@@ -11,7 +14,7 @@ Future = Npm.require('fibers/future')
 
   return fut.wait()
 
-fetch = (collection, start, end, resample, options) ->
+fetch = (collection, start, end, resample, sum, options) ->
   res = []
   nextTimestamp = 0
   options = options || {}
@@ -30,6 +33,7 @@ fetch = (collection, start, end, resample, options) ->
         else
           while nextTimestamp < time
             nextTimestamp += resample
+
         res.push doc
 
   else
@@ -44,6 +48,43 @@ fetch = (collection, start, end, resample, options) ->
     for row in res
       for key in keys
         newData[key].push row[key]
+
+    if sum
+      for key in keys
+        first = newData[key][0]
+        if +first == first or key == 'ga:sessions' or key == 'ga:hits'
+          total = 0
+          newData[key] = _.map newData[key], (val) ->
+            total += +val
+            return total
+
+      newData["_count"] = _.range(1, res.length + 1)
+      if collection == LogData
+        total = 0
+        newData["count_daily"] = _.map newData['type'], (val) ->
+          if val == 'daily'
+            total += 1
+          return total
+        total = 0
+        newData["count_install"] = _.map newData['type'], (val) ->
+          if val == 'install'
+            total += 1
+          return total
+        total = 0
+        newData["count_startup"] = _.map newData['type'], (val) ->
+          if val == 'startup'
+            total += 1
+          return total
+        total = 0
+        newData["count_manual"] = _.map newData['type'], (val) ->
+          if val == 'manual'
+            total += 1
+          return total
+        total = 0
+        newData["count_retry"] = _.map newData['type'], (val) ->
+          if val == 'retry'
+            total += 1
+          return total
 
     res = newData
 
@@ -115,7 +156,7 @@ Meteor.methods
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(GoogleData, start, end, resample)
+    return fetch(GoogleData, start, end, resample, true)
 
   fetchGithub: (start, end, resample) ->
     unless isAdmin(Meteor.userId())
@@ -133,4 +174,4 @@ Meteor.methods
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(LogData, start, end, resample)
+    return fetch(LogData, start, end, resample, true)
