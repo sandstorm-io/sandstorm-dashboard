@@ -103,7 +103,7 @@ Meteor.methods
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(TwitterData, start, end, resample, {fields: {timestamp: 1, followers_count: 1, statuses_count: 1}})
+    return fetch(TwitterData, start, end, resample, false, {fields: {timestamp: 1, followers_count: 1, statuses_count: 1}})
 
   fetchMailchimp: (start, end, resample) ->
     unless isAdmin(Meteor.userId())
