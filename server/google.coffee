@@ -23,6 +23,8 @@ previous_referrers = null
 @getGoogle = ->
   data = wrappedGA(null)
   data = data.totalsForAllResults
+  data['ga:sessions'] = +data['ga:sessions']
+  data['ga:hits'] = +data['ga:hits']
   if not previous or data['ga:sessions'] < previous['ga:sessions']
     previous = data
   else
