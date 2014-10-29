@@ -166,7 +166,7 @@ Meteor.methods
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(GithubData, start, end, resample)
+    return fetch(GithubData, start, end, resample, false, {fields: {timestamp: 1, stargazers_count: 1, subscribers_count: 1}})
 
   fetchSandstorm: (start, end, resample) ->
     unless isAdmin(Meteor.userId())
