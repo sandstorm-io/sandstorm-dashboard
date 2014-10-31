@@ -169,13 +169,13 @@ Meteor.methods
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(MailchimpData, start, end, true)
+    return fetch(MailchimpData, start, end, true, false, {fields: {timestamp: 1, stats_member_count: 1}})
 
   fetchGoogle: (start, end) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(GoogleData, start, end, true, true)
+    return fetch(GoogleData, start, end, true, true, {fields: {timestamp: 1, 'ga:hits': 1, 'ga:sessions': 1}})
 
   fetchGithub: (start, end) ->
     unless isAdmin(Meteor.userId())
@@ -193,4 +193,4 @@ Meteor.methods
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(LogData, start, end, true, true)
+    return fetch(LogData, start, end, true, true, {fields: {timestamp: 1, type: 1}})
