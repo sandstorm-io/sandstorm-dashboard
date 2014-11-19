@@ -14,7 +14,7 @@ isNumber = (n) ->
 
   return fut.wait()
 
-fetch = (collection, start, end, resample, sum, options) ->
+fetch = (collection, start, end, resample, sum, delta, options) ->
   res = []
   nextTimestamp = 0
   options = options || {}
@@ -100,8 +100,12 @@ fetch = (collection, start, end, resample, sum, options) ->
             break
           i += 1
 
-        for key in keys
-          newData[key].push(res[key][i] - res[key][previous])
+        if delta
+          for key in keys
+            newData[key].push(res[key][i] - res[key][previous])
+        else
+          for key in keys
+            newData[key].push(res[key][i])
 
         newData.timestamp[newData.timestamp.length - 1] = new Date(currT)
         previous = i
@@ -163,34 +167,34 @@ Meteor.methods
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(TwitterData, start, end, true, false, {fields: {timestamp: 1, followers_count: 1, statuses_count: 1}})
+    return fetch(TwitterData, start, end, true, false, false, {fields: {timestamp: 1, followers_count: 1, statuses_count: 1}})
 
   fetchMailchimp: (start, end) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(MailchimpData, start, end, true, false, {fields: {timestamp: 1, stats_member_count: 1}})
+    return fetch(MailchimpData, start, end, true, false, false, {fields: {timestamp: 1, stats_member_count: 1}})
 
   fetchGoogle: (start, end) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(GoogleData, start, end, true, true, {fields: {timestamp: 1, 'ga:hits': 1, 'ga:sessions': 1}})
+    return fetch(GoogleData, start, end, true, true, false, {fields: {timestamp: 1, 'ga:hits': 1, 'ga:sessions': 1}})
 
   fetchGithub: (start, end) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(GithubData, start, end, true, false, {fields: {timestamp: 1, stargazers_count: 1, subscribers_count: 1}})
+    return fetch(GithubData, start, end, true, false, false, {fields: {timestamp: 1, stargazers_count: 1, subscribers_count: 1}})
 
   fetchSandstorm: (start, end) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(SandstormData, start, end, false)
+    return fetch(SandstormData, start, end, false, false, false)
 
   fetchLog: (start, end) ->
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(LogData, start, end, true, true, {fields: {timestamp: 1, type: 1}})
+    return fetch(LogData, start, end, true, true, true, {fields: {timestamp: 1, type: 1}})
