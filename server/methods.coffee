@@ -179,7 +179,7 @@ Meteor.methods
     unless isAdmin(Meteor.userId())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(GoogleData, start, end, true, true, false, {fields: {timestamp: 1, 'ga:hits': 1, 'ga:sessions': 1}})
+    return fetch(GoogleData, start, end, true, true, true, {fields: {timestamp: 1, 'ga:hits': 1, 'ga:sessions': 1}})
 
   fetchGithub: (start, end) ->
     unless isAdmin(Meteor.userId())
