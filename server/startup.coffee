@@ -16,6 +16,7 @@ Meteor.startup ->
   startGithubTimer()
   startGoogleTimer()
   startSandstormTimer()
+  startDemoSandstormTimer()
 
   Accounts.validateLoginAttempt (info) ->
     if !info.allowed

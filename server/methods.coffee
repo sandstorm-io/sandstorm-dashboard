@@ -121,8 +121,8 @@ Meteor.methods
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    data.userId = Meteor.userId()
-    Dashboards.upsert({userId: Meteor.userId()}, data)
+    data.userId = "main"
+    Dashboards.upsert({userId: "main"}, data)
 
   setupTwitter: (credentialToken, credentialSecret) ->
     unless userIsAdmin(Meteor.user())
@@ -192,6 +192,12 @@ Meteor.methods
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(SandstormData, start, end, false, false, false)
+
+  fetchDemoSandstorm: (start, end) ->
+    unless userIsAdmin(Meteor.user())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    return fetch(DemoSandstormData, start, end, false, false, false)
 
   fetchLog: (start, end) ->
     unless userIsAdmin(Meteor.user())
