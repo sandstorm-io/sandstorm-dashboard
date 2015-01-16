@@ -21,6 +21,10 @@ Meteor.startup ->
     if !info.allowed
       return false
     user = info.user
+
+    if !user.services?.google
+      return false
+
     google = user.services.google
 
     if google.verified_email and userIsAdmin(user)
