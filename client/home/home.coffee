@@ -17,3 +17,7 @@ Template.home.events
     updateDashboard()
 
 # Meteor.setInterval updateDashboard, 5000
+
+clickToggle = ->
+  $('#toggle-header').click()
+Meteor.setTimeout clickToggle, 3000
