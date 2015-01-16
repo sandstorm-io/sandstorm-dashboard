@@ -61,7 +61,6 @@ Router.map ->
     return false
 
 requireAdmin = (pause) ->
-  console.log 'requireAdmin', Meteor.user()
   if Meteor.user()
     if userIsAdmin(Meteor.user())
       @next()
