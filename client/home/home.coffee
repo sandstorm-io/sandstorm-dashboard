@@ -16,4 +16,4 @@ Template.home.events
   'click #saveDashboard': ->
     updateDashboard()
 
-Meteor.setInterval updateDashboard, 5000
+# Meteor.setInterval updateDashboard, 5000
