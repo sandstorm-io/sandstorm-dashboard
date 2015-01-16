@@ -6,7 +6,6 @@
 standard-app-packages
 iron:router
 sacha:spin
-accounts-password
 coffeescript
 stylus
 npm-imports
@@ -14,3 +13,4 @@ twitter
 oauth-helper
 accounts-ui
 chrismbeckett:fontawesome4
+accounts-google

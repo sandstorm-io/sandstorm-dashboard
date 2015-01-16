@@ -118,14 +118,14 @@ fetchLatest = (collection) ->
 
 Meteor.methods
   updateDashboard: (data) ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     data.userId = Meteor.userId()
     Dashboards.upsert({userId: Meteor.userId()}, data)
 
   setupTwitter: (credentialToken, credentialSecret) ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     data = OauthRetrieveCredential(credentialToken, credentialSecret)
@@ -134,67 +134,67 @@ Meteor.methods
     startTwitterTimer(options)
 
   fetchLatestTwitter: ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetchLatest(TwitterData)
 
   fetchLatestMailchimp: ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetchLatest(MailchimpData)
 
   fetchLatestGoogle: ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetchLatest(GoogleData)
 
   fetchLatestGithub: ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetchLatest(GithubData)
 
   fetchLatestLog: ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetchLatest(LogData)
 
   fetchTwitter: (start, end) ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(TwitterData, start, end, true, false, false, {fields: {timestamp: 1, followers_count: 1, statuses_count: 1}})
 
   fetchMailchimp: (start, end) ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(MailchimpData, start, end, true, false, false, {fields: {timestamp: 1, stats_member_count: 1}})
 
   fetchGoogle: (start, end) ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(GoogleData, start, end, true, true, true, {fields: {timestamp: 1, 'ga:hits': 1, 'ga:sessions': 1}})
 
   fetchGithub: (start, end) ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(GithubData, start, end, true, false, false, {fields: {timestamp: 1, stargazers_count: 1, subscribers_count: 1}})
 
   fetchSandstorm: (start, end) ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(SandstormData, start, end, false, false, false)
 
   fetchLog: (start, end) ->
-    unless isAdmin(Meteor.userId())
+    unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(LogData, start, end, true, true, true, {fields: {timestamp: 1, type: 1}})

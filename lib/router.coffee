@@ -54,9 +54,17 @@ Router.map ->
 
       return
 
+@userIsAdmin = (user) ->
+  try
+    user.services.google.email.split('@').slice(-1)[0] == Meteor.settings.public.domain
+  catch error
+    return false
+
 requireAdmin = (pause) ->
+  console.log 'requireAdmin', Meteor.user()
   if Meteor.user()
-    if _.contains(Meteor.user().permissions, 'admin')
+    if userIsAdmin(Meteor.user())
+      @next()
       return
     else
       @render "accessDenied"
@@ -66,9 +74,11 @@ requireAdmin = (pause) ->
     else
       @render "accessDenied"
   pause()
+
 Router.onBeforeAction "loading", {except: 'uploadLog'}
 Router.onBeforeAction requireAdmin, {except: 'uploadLog'}
 Router.onBeforeAction( ->
   clearErrors()
+  @next()
 , {except: 'uploadLog'})
 
