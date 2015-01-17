@@ -17,6 +17,7 @@ Meteor.startup ->
   startGoogleTimer()
   startSandstormTimer()
   startDemoSandstormTimer()
+  startPreordersTimer()
 
   Accounts.validateLoginAttempt (info) ->
     if !info.allowed

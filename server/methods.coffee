@@ -163,6 +163,12 @@ Meteor.methods
 
     return fetchLatest(LogData)
 
+  fetchLatestPreorders: ->
+    unless userIsAdmin(Meteor.user())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    return fetchLatest(Preorders)
+
   fetchTwitter: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
@@ -204,3 +210,9 @@ Meteor.methods
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(LogData, start, end, true, true, true, {fields: {timestamp: 1, type: 1}})
+
+  fetchPreorders: (start, end) ->
+    unless userIsAdmin(Meteor.user())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    return fetch(Preorders, start, end, true, false, false)
