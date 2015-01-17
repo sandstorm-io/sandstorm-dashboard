@@ -20,4 +20,4 @@ Template.home.events
 
 clickToggle = ->
   $('#toggle-header').click()
-Meteor.setTimeout clickToggle, 3000
+Meteor.setTimeout clickToggle, 5000

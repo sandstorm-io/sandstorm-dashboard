@@ -34,7 +34,7 @@ fetch = (collection, start, end, resample, sum, delta, options) ->
       for key in keys
         newData[key].push row[key]
 
-    if collection == LogData
+    if collection == LogData or collection == SandstormData or collection == DemoSandstormData
       newData['timestamp'] = _.map newData['timestamp'], (val) ->
         return new Date(val)
 
