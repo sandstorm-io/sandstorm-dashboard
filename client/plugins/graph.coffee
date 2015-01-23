@@ -3,6 +3,21 @@ zip = (arrays) ->
     arrays.map (array) ->
       array[i]
 
+findBounds = (array) ->
+  min = array[0]
+  max = array[0]
+
+  for elem in array
+    if elem < min
+      min = elem
+    if elem > max
+      max = elem
+
+  return {
+    min: min
+    max: max
+  }
+
 myWidgetPlugin = (settings) ->
   self = this
   currentSettings = settings
@@ -26,13 +41,22 @@ myWidgetPlugin = (settings) ->
     return
 
   drawGraph = ->
-    graph = Flotr.draw myTextElement[0], [ zip([data.x_axis, data.y_axis]) ],
+    yaxis =
+      tickDecimals: 0
+    if currentSettings.y_logarithmic
+      yaxis.tickDecimals = 10
+      yaxis.scaling = 'logarithmic'
+      bounds = findBounds(data.y_axis)
+      step = (bounds.max - bounds.min) / 8
+      yaxis.ticks = [0...9].map (elem) ->
+        Math.round(bounds.min + step * elem)
+    zipped_data = [ zip([data.x_axis, data.y_axis]) ]
+    graph = Flotr.draw myTextElement[0], zipped_data,
       xaxis:
         mode: if currentSettings.x_axis.indexOf('time') != -1 then 'time' else 'normal'
         timeMode: 'local'
         tickDecimals: 0
-      yaxis:
-        tickDecimals: 0
+      yaxis: yaxis
       grid:
         verticalLines: false
         horizontalLines: false
@@ -68,6 +92,11 @@ myWidgetPlugin = (settings) ->
         name: "y_axis"
         display_name: "Y Axis"
         type: "calculated"
+      }
+      {
+        name: "y_logarithmic"
+        display_name: "Scale Y Axis Logarithmically"
+        type: "boolean"
       }
       {
         name: "size"
