@@ -4,7 +4,7 @@ Template.home.rendered = ->
       loadMeteorPlugin()
       loadGraphWidget()
 
-      freeboard.initialize true, =>
+      freeboard.initialize false, =>
         theFreeboardModel.loadDashboard(@data)
 
 updateDashboard = ->
@@ -17,7 +17,3 @@ Template.home.events
     updateDashboard()
 
 # Meteor.setInterval updateDashboard, 5000
-
-clickToggle = ->
-  $('#toggle-header').click()
-Meteor.setTimeout clickToggle, 5000
