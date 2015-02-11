@@ -43,14 +43,26 @@ myWidgetPlugin = (settings) ->
   drawGraph = ->
     yaxis =
       tickDecimals: 0
+    trackformatter = Flotr.defaultTrackFormatter
     if currentSettings.y_logarithmic
+      base = 10
+      baseLog = Math.log base
       yaxis.tickDecimals = 10
       yaxis.scaling = 'logarithmic'
       bounds = findBounds(data.y_axis)
-      step = (bounds.max - bounds.min) / 8
-      yaxis.ticks = [0...9].map (elem) ->
-        Math.round(bounds.min + step * elem)
-    zipped_data = [ zip([data.x_axis, data.y_axis]) ]
+      val = 1
+      yaxis.ticks = while val < bounds.max
+        val *= 10
+        [Math.log(val) / baseLog, val]
+      yaxis.ticks.push([(Math.log(bounds.min) / baseLog) || 0, bounds.min])
+      yaxis.ticks.push([Math.log(bounds.max) / baseLog, bounds.max])
+      data_y_axis = data.y_axis.map (elem) ->
+        Math.log(elem) / baseLog
+      zipped_data = [ zip([data.x_axis, data_y_axis]) ]
+      trackformatter = (obj) ->
+        "(#{obj.x.toString()}, #{data.y_axis[obj.index]})"
+    else
+      zipped_data = [ zip([data.x_axis, data.y_axis]) ]
     graph = Flotr.draw myTextElement[0], zipped_data,
       xaxis:
         mode: if currentSettings.x_axis.indexOf('time') != -1 then 'time' else 'normal'
@@ -63,6 +75,7 @@ myWidgetPlugin = (settings) ->
       mouse:
         track: true
         trackAll: true
+        trackFormatter: trackformatter
 
   self.onCalculatedValueChanged = (settingName, newValue) ->
     data[settingName] = newValue
