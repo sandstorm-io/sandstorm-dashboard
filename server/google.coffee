@@ -7,21 +7,27 @@ jwt.authorize (err, result) ->
   if err
     console.log err
     return
-wrappedGA = Meteor.wrapAsync((dimensions, func) ->
+wrappedGA = Meteor.wrapAsync((dimensions, date, func) ->
+  date = date || "today"
   analytics.data.ga.get
     auth: jwt
     dimensions: dimensions
     ids: "ga:#{GA_VIEW_ID}"
-    "start-date": "today"
-    "end-date": "today"
+    "start-date": date
+    "end-date": date
     metrics: "ga:sessions,ga:hits"
   , func
 )
 
+Meteor.startup ->
+  if GoogleData.find().count() == 0
+    startDate = new Date('2014-07-01')
+
 previous = null
 previous_referrers = null
-@getGoogle = ->
-  data = wrappedGA(null)
+@getGoogle = (date) ->
+  date = date || null
+  data = wrappedGA(null, date)
   data = data.totalsForAllResults
   data['ga:sessions'] = +data['ga:sessions']
   data['ga:hits'] = +data['ga:hits']
@@ -34,7 +40,7 @@ previous_referrers = null
     previous = data
     data = newData
 
-  referrers = wrappedGA("ga:fullReferrer").rows
+  referrers = wrappedGA("ga:fullReferrer", date).rows
   if referrers?.length
     # TODO: clean this up
     data.referrers = referrers
@@ -48,3 +54,18 @@ previous_referrers = null
 
   Meteor.setInterval(insert, 300000)
   insert()
+
+@refreshGoogle = (start, end) ->
+  d = startDate = new Date(start)
+
+  d.setDate(d.getDate() + 1)
+  d.setMinutes(d.getMinutes() - 1)
+  endDate = new Date(end)
+
+  while d < endDate
+    console.log "inserting google data for #{d}"
+    data = getGoogle(d.toISOString().slice(0, 10))
+    data.timestamp = d
+    GoogleData.insert(data)
+
+    d.setDate(d.getDate() + 1)

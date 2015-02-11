@@ -19,6 +19,11 @@ Meteor.startup ->
   startDemoSandstormTimer()
   startPreordersTimer()
 
+  google_refresh = Meteor.settings.google.refresh
+  console.log google_refresh
+  if google_refresh
+    refreshGoogle(google_refresh.start, google_refresh.end)
+
   Accounts.validateLoginAttempt (info) ->
     if !info.allowed
       return false
@@ -31,5 +36,5 @@ Meteor.startup ->
 
     if google.verified_email and userIsAdmin(user)
       return true
-    throw new Meteor.Error(403, "You are not part of #{Meteor.settings.domain}")
+    throw new Meteor.Error(403, "You are not part of #{Meteor.settings.public.domain}")
 
