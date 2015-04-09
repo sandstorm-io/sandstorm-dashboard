@@ -29,6 +29,8 @@ myWidgetPlugin = (settings) ->
     return
 
   self.getHeight = ->
+    if currentSettings.size is "xxl"
+      8
     if currentSettings.size is "xl"
       4
     else if currentSettings.size is "big"
@@ -127,6 +129,10 @@ myWidgetPlugin = (settings) ->
           {
             name: "Extra Large"
             value: "xl"
+          }
+          {
+            name: "Extra Extra Large"
+            value: "xxl"
           }
         ]
       }
