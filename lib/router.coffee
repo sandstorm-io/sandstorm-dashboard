@@ -53,6 +53,43 @@ Router.map ->
         @response.end()
 
       return
+  @route "uploadSandcats",
+    where: "server"
+    path: "/uploadSandcats/:tokenId"
+    action: ->
+      tokenId = @params.tokenId
+
+      if tokenId != Meteor.settings.sandcatsToken
+        @response.writeHead 403,
+          "Content-Type": "text/plain"
+
+        @response.write "Wrong token"
+        @response.end()
+        return
+
+      if @request.method != "POST"
+        @response.writeHead 405,
+          "Content-Type": "text/plain"
+
+        @response.write "You can only POST here."
+        @response.end()
+        return
+
+      try
+        Meteor.bindEnvironment(doSandcatsUpload(@request))
+        @response.writeHead 200,
+          "Content-Type": "text/plain"
+
+        @response.end()
+      catch error
+        console.error error.stack
+        @response.writeHead 500,
+          "Content-Type": "text/plain"
+
+        @response.write error.stack
+        @response.end()
+
+      return
 
 @userIsAdmin = (user) ->
   try
@@ -74,10 +111,12 @@ requireAdmin = (pause) ->
       @render "accessDenied"
   pause()
 
-Router.onBeforeAction "loading", {except: 'uploadLog'}
-Router.onBeforeAction requireAdmin, {except: 'uploadLog'}
+nonMeteorRoutes = ['uploadLog', 'uploadSandcats']
+
+Router.onBeforeAction "loading", {except: nonMeteorRoutes}
+Router.onBeforeAction requireAdmin, {except: nonMeteorRoutes}
 Router.onBeforeAction( ->
   clearErrors()
   @next()
-, {except: 'uploadLog'})
+, {except: nonMeteorRoutes})
 

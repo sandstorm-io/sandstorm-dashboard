@@ -23,6 +23,7 @@
     "statsUrl": "https://MY_URL/stats/MY_TOKEN"
   },
   "logToken": "FILL_WITH_RANDOM_ALPHANUMERIC_CHARACTERS",
+  "sandcatsToken": "FILL_WITH_RANDOM_ALPHANUMERIC_CHARACTERS",
 
   "public": {
     "domain": "corp.sandstorm.io"
