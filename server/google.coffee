@@ -23,6 +23,7 @@ Meteor.startup ->
   if GoogleData.find().count() == 0
     startDate = new Date('2014-07-01')
 
+isFirst = true
 previous = null
 previous_referrers = null
 @getGoogle = (date) ->
@@ -50,6 +51,9 @@ previous_referrers = null
   insert = ->
     data = getGoogle()
     data.timestamp = new Date()
+    if isFirst
+      isFirst = false
+      return
     GoogleData.insert(data)
 
   Meteor.setInterval(insert, 300000)
