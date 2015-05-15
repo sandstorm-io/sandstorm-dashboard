@@ -27,5 +27,9 @@
 
   "public": {
     "domain": "corp.sandstorm.io"
+  },
+  "logFilter": {
+    "ips": [],
+    "user_agents": []
   }
 }

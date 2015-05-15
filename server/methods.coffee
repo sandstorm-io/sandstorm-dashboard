@@ -22,7 +22,12 @@ fetch = (collection, start, end, resample, sum, delta, options) ->
   if (not options.sort)
     options.sort = {timestamp: 1}
 
-  res = collection.find({}, options).fetch()
+  filter = {}
+  if options.filter?
+    filter = options.filter
+    delete options["filter"]
+
+  res = collection.find(filter, options).fetch()
 
   if res.length
     newData = {}
@@ -209,7 +214,10 @@ Meteor.methods
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(LogData, start, end, true, true, true, {fields: {timestamp: 1, type: 1}})
+    filter =
+      ip: {"$nin": Meteor.settings.logFilter.ips}
+      client: {"$nin": Meteor.settings.logFilter.user_agents}
+    return fetch(LogData, start, end, true, true, true, {fields: {timestamp: 1, type: 1}, filter: filter})
 
   fetchPreorders: (start, end) ->
     unless userIsAdmin(Meteor.user())
