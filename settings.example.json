@@ -19,6 +19,9 @@
   "demoSandstorm": {
     "statsUrl": "https://MY_URL/fetchStats/MY_TOKEN"
   },
+  "oasisSandstorm": {
+    "statsUrl": "https://MY_URL/fetchStats/MY_TOKEN"
+  },
   "preorders": {
     "statsUrl": "https://MY_URL/stats/MY_TOKEN"
   },

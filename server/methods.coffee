@@ -210,6 +210,12 @@ Meteor.methods
 
     return fetch(DemoSandstormData, start, end, false, false, false)
 
+  fetchOasisSandstorm: (start, end) ->
+    unless userIsAdmin(Meteor.user())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    return fetch(OasisSandstormData, start, end, false, false, false)
+
   fetchLog: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")

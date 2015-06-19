@@ -17,6 +17,7 @@ Meteor.startup ->
   startGoogleTimer()
   startSandstormTimer()
   startDemoSandstormTimer()
+  startOasisSandstormTimer()
   startPreordersTimer()
 
   google_refresh = Meteor.settings.google.refresh

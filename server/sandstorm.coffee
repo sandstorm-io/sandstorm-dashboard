@@ -50,3 +50,30 @@
 
   Meteor.setInterval(insert, 300000)
   insert()
+
+@getOasisSandstorm = ->
+  data = Meteor.http.get Meteor.settings.oasisSandstorm.statsUrl
+
+  rows = JSON.parse(data.content)
+  res = []
+  for row in rows
+    newRow = {}
+    newRow.timestamp = Date.parse row.timestamp
+    newRow.dailyActiveUsers = row.daily.activeUsers
+    newRow.dailyAppDemoUsers = row.daily.appDemoUsers
+    newRow.dailyActiveGrains = row.daily.activeGrains
+    res.push newRow
+
+  return res
+
+@startOasisSandstormTimer = ->
+  insert = ->
+    try
+      data = getOasisSandstorm()
+      for row in data
+        OasisSandstormData.upsert({timestamp: row.timestamp}, row)
+    catch err
+      console.error err
+
+  Meteor.setInterval(insert, 300000)
+  insert()
