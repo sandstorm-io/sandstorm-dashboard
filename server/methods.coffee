@@ -230,3 +230,9 @@ Meteor.methods
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return fetch(Preorders, start, end, true, false, false)
+
+  fetchOasisMonitorData: ->
+    unless userIsAdmin(Meteor.user())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    return OasisMonitorData.find({timestamp: {$gt: new Date(new Date().getTime() - 86400000)}}).fetch()

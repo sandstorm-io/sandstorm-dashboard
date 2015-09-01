@@ -20,7 +20,8 @@
     "statsUrl": "https://MY_URL/fetchStats/MY_TOKEN"
   },
   "oasisSandstorm": {
-    "statsUrl": "https://MY_URL/fetchStats/MY_TOKEN"
+    "statsUrl": "https://MY_URL/fetchStats/MY_TOKEN",
+    "buildUrl": "https://build.sandstorm.io/job/Oasis%20Monitor"
   },
   "preorders": {
     "statsUrl": "https://MY_URL/stats/MY_TOKEN"
