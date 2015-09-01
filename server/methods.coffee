@@ -235,5 +235,5 @@ Meteor.methods
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    filter = {timestamp: {$gt: new Date(new Date().getTime() - 86400000)}}
-    return fetch(OasisSandstormData, null, null, false, false, false, {filter: filter})
+    filter = {mainPageResponseMs: {"$exists": true}, timestamp: {$gt: new Date(new Date().getTime() - 86400000)}}
+    return fetch(OasisMonitorData, null, null, false, false, false, {filter: filter})
