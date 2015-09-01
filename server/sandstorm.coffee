@@ -60,8 +60,13 @@
     newRow = {}
     newRow.timestamp = Date.parse row.timestamp
     newRow.dailyActiveUsers = row.daily.activeUsers
+    newRow.dailyDemoUsers = row.daily.demoUsers
     newRow.dailyAppDemoUsers = row.daily.appDemoUsers
     newRow.dailyActiveGrains = row.daily.activeGrains
+    newRow.monthlyActiveUsers = row.monthly.activeUsers
+    newRow.monthlyDemoUsers = row.monthly.demoUsers
+    newRow.monthlyAppDemoUsers = row.monthly.appDemoUsers
+    newRow.monthlyActiveGrains = row.monthly.activeGrains
     res.push newRow
 
   return res
