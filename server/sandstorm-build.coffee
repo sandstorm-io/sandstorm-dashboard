@@ -26,13 +26,12 @@ grainFrameRegex = new RegExp(escapeRegex("Element <#publish> was present after "
         log = Meteor.http.get(Meteor.settings.oasisSandstorm.buildUrl + "/" + currentNum + "/consoleText").content
         newRow.mainPageResponseMs = mainPageRegex.exec(log)[1]
         newRow.installResponseMs = mainPageRegex.exec(log)[1]
-        log = log.slice(testNewGrainRegex.exec(log).index)
         newRow.appListResponseMs = appListRegex.exec(log)[1]
         newRow.appListButtonResponseMs = appListButtonRegex.exec(log)[1]
         newRow.grainTitleResponsMs = grainTitleRegex.exec(log)[1]
         newRow.grainFrameResponseMs = grainFrameRegex.exec(log)[1]
       catch e
-        console.error("Couldn't parse log for " + currentNum)
+        console.error("Couldn't parse log for " + currentNum, e)
     res.push newRow
 
     currentNum++
