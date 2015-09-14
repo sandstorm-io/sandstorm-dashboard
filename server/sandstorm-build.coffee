@@ -24,12 +24,17 @@ grainFrameRegex = new RegExp(escapeRegex("Element <#publish> was present after "
     if build.result == "SUCCESS"
       try
         log = Meteor.http.get(Meteor.settings.oasisSandstorm.buildUrl + "/" + currentNum + "/consoleText").content
-        newRow.mainPageResponseMs = mainPageRegex.exec(log)[1]
-        newRow.installResponseMs = mainPageRegex.exec(log)[1]
-        newRow.appListResponseMs = appListRegex.exec(log)[1]
-        newRow.appListButtonResponseMs = appListButtonRegex.exec(log)[1]
         newRow.grainTitleResponsMs = grainTitleRegex.exec(log)[1]
         newRow.grainFrameResponseMs = grainFrameRegex.exec(log)[1]
+        log = log.slice(log.indexOf("Init cookie 1"));
+        newRow.grainTitleResponsMs2 = grainTitleRegex.exec(log)[1]
+        newRow.grainFrameResponseMs2 = grainFrameRegex.exec(log)[1]
+        log = log.slice(log.indexOf("Init cookie 2"));
+        newRow.grainTitleResponsMs3 = grainTitleRegex.exec(log)[1]
+        newRow.grainFrameResponseMs3 = grainFrameRegex.exec(log)[1]
+        log = log.slice(log.indexOf("Init cookie 3"));
+        newRow.grainTitleResponsMs4 = grainTitleRegex.exec(log)[1]
+        newRow.grainFrameResponseMs4 = grainFrameRegex.exec(log)[1]
       catch e
         console.error("Couldn't parse log for " + currentNum, e)
     res.push newRow
