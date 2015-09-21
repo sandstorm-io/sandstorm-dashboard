@@ -67,7 +67,12 @@
     newRow.monthlyDemoUsers = row.monthly.demoUsers
     newRow.monthlyAppDemoUsers = row.monthly.appDemoUsers
     newRow.monthlyActiveGrains = row.monthly.activeGrains
-    newRow.plans = row.plans
+    if row.plans
+      newRow.plansFree = row.plans.free
+      newRow.plansStandard = row.plans.standard
+      newRow.plansLarge = row.plans.large
+      newRow.plansMega = row.plans.mega
+      newRow.plansRevenue = row.plans.standard * 6 + row.plans.large * 12 + row.plans.mega * 24
     res.push newRow
 
   return res
