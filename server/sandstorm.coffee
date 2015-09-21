@@ -67,6 +67,7 @@
     newRow.monthlyDemoUsers = row.monthly.demoUsers
     newRow.monthlyAppDemoUsers = row.monthly.appDemoUsers
     newRow.monthlyActiveGrains = row.monthly.activeGrains
+    newRow.plans = row.plans
     res.push newRow
 
   return res
