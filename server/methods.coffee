@@ -32,6 +32,11 @@ fetch = (collection, start, end, resample, sum, delta, options) ->
   if res.length
     newData = {}
     keys = Object.keys(res[0])
+
+    if collection == OasisSandstormData
+      for row in res
+        row.dailyActiveOverMonthlyActive = row.dailyActiveUsers / row.monthlyActiveUsers
+
     for key in keys
       newData[key] = []
 
