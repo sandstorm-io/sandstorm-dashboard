@@ -34,6 +34,7 @@ fetch = (collection, start, end, resample, sum, delta, options) ->
     keys = Object.keys(res[0])
 
     if collection == OasisSandstormData
+      keys.push("dailyActiveOverMonthlyActive")
       for row in res
         row.dailyActiveOverMonthlyActive = row.dailyActiveUsers / row.monthlyActiveUsers
 
