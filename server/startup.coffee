@@ -20,6 +20,7 @@ Meteor.startup ->
   startOasisSandstormTimer()
   startPreordersTimer()
   startOasisMonitorTimer()
+  startSandstormUserTimer()
 
   google_refresh = Meteor.settings.google.refresh
   console.log google_refresh

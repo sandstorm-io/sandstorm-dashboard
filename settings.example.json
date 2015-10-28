@@ -15,6 +15,7 @@
   },
   "sandstorm": {
     "statsUrl": "https://MY_URL/fetchStats/MY_TOKEN"
+    "userStatsUrl": "https://MY_URL/fetchStats/MY_TOKEN"
   },
   "demoSandstorm": {
     "statsUrl": "https://MY_URL/fetchStats/MY_TOKEN"

@@ -243,3 +243,10 @@ Meteor.methods
 
     filter = {grainTitleResponsMs: {"$exists": true}, timestamp: {$gt: new Date(new Date().getTime() - 86400000)}}
     return fetch(OasisMonitorData, null, null, false, false, false, {filter: filter})
+
+  fetchSandstormUserData: (start, end) ->
+    unless userIsAdmin(Meteor.user())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    return fetch(SandstormUserData, start, end, true, true, false)
+
