@@ -14,7 +14,7 @@ isNumber = (n) ->
 
   return fut.wait()
 
-fetch = (collection, start, end, resample, sum, delta, options) ->
+@fetch = (collection, start, end, resample, sum, delta, options) ->
   res = []
   nextTimestamp = 0
   options = options || {}
@@ -45,7 +45,7 @@ fetch = (collection, start, end, resample, sum, delta, options) ->
       for key in keys
         newData[key].push row[key]
 
-    if collection == LogData or collection == SandstormData or collection == DemoSandstormData or collection == OasisSandstormData
+    if collection == LogData or collection == SandstormData or collection == DemoSandstormData or collection == OasisSandstormData or collection == SandstormUserData
       newData['timestamp'] = _.map newData['timestamp'], (val) ->
         return new Date(val)
 
