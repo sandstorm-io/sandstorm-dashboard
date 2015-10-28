@@ -248,5 +248,5 @@ Meteor.methods
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(SandstormUserData, start, end, true, true, false)
+    return fetch(SandstormUserData, start, end, true, true, true)
 
