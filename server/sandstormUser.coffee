@@ -33,4 +33,3 @@ token = urlParts[1]
 
   Meteor.setInterval(insert, 300000)
   insert()
-
