@@ -72,7 +72,7 @@
     newRow.plansBasic = row.plans?.basic or 0
     newRow.plansLarge = row.plans?.large or 0
     newRow.plansMega = row.plans?.mega or 0
-    newRow.plansRevenue = if row.plans then row.plans.standard * 6 + row.plans.large * 12 + row.plans.mega * 24 else 0
+    newRow.plansRevenue = if row.plans then newRow.plansStandard * 6 + newRow.plansBasic * 9 + newRow.plansLarge * 12 + newRow.plansMega * 24 else 0
     newRow.plansPaidUsers = newRow.plansStandard + newRow.plansBasic + newRow.plansLarge + newRow.plansMega
     newRow.totalUsers = row.forever?.activeUsers or 0
     res.push newRow
