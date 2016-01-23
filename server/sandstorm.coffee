@@ -75,6 +75,10 @@
     newRow.plansRevenue = if row.plans then newRow.plansStandard * 6 + newRow.plansBasic * 9 + newRow.plansLarge * 12 + newRow.plansMega * 24 else 0
     newRow.plansPaidUsers = newRow.plansStandard + newRow.plansBasic + newRow.plansLarge + newRow.plansMega
     newRow.totalUsers = row.forever?.activeUsers or 0
+    newRow.dailySharedUsers = 0
+    if row.daily.apps
+      for key, val of row.daily.apps
+        newRow.sharedUsers += val.sharedUsers or 0
     res.push newRow
 
   return res
