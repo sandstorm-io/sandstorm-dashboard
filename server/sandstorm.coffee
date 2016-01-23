@@ -78,7 +78,7 @@
     newRow.dailySharedUsers = 0
     if row.daily.apps
       for key, val of row.daily.apps
-        newRow.sharedUsers += val.sharedUsers or 0
+        newRow.dailySharedUsers += val.sharedUsers or 0
     res.push newRow
 
   return res
