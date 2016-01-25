@@ -249,7 +249,7 @@ Meteor.methods
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-      return dataCache.Github or fetchMethods.fetchGithub(start, end)
+    return dataCache.Github or fetchMethods.fetchGithub(start, end)
 
   fetchSandstorm: (start, end) ->
     unless userIsAdmin(Meteor.user())
