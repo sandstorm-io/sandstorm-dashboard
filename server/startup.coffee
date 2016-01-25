@@ -28,7 +28,7 @@ Meteor.startup ->
     refreshGoogle(google_refresh.start, google_refresh.end)
 
   populateCache()
-  Meteor.setInterval populateCache, 15 * 60 * 1000
+  Meteor.setInterval populateCache, 60 * 60 * 1000
   Accounts.validateLoginAttempt (info) ->
     if !info.allowed
       return false
