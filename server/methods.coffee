@@ -130,7 +130,7 @@ fetchLatest = (collection) ->
 # This is slighyly crazy, but all data sources follow an implicit naming schema.
 # For example for twitter, there is a method named "fetchTwitter" that reads from the TwitterData
 # collection, and writes to TwitterDataCache. This fact is used for simplifiying code.
-fetchMethods =
+@fetchMethods =
   fetchTwitter: (start, end) ->
     return fetch(TwitterData, start, end, true, false, false, {fields: {timestamp: 1, followers_count: 1, statuses_count: 1}})
 
