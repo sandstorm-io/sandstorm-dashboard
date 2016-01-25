@@ -168,7 +168,7 @@ fetchLatest = (collection) ->
   fetchSandstormUserData: (start, end) ->
     return fetch(SandstormUserData, start, end, true, true, true)
 
-dataCache = {}
+@dataCache = {}
 @populateCache = ->
   for key, func of fetchMethods
     source = key.replace('fetch', '')
