@@ -27,6 +27,8 @@ Meteor.startup ->
   if google_refresh
     refreshGoogle(google_refresh.start, google_refresh.end)
 
+  populateCache()
+  Meteor.setInterval populateCache, 15 * 60 * 1000
   Accounts.validateLoginAttempt (info) ->
     if !info.allowed
       return false
@@ -40,4 +42,3 @@ Meteor.startup ->
     if google.verified_email and userIsAdmin(user)
       return true
     throw new Meteor.Error(403, "You are not part of #{Meteor.settings.public.domain}")
-

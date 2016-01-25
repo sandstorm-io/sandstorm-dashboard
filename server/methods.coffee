@@ -127,6 +127,53 @@ isNumber = (n) ->
 fetchLatest = (collection) ->
   return collection.findOne({}, {sort: {$natural: -1 }, limit: 1})
 
+# This is slighyly crazy, but all data sources follow an implicit naming schema.
+# For example for twitter, there is a method named "fetchTwitter" that reads from the TwitterData
+# collection, and writes to TwitterDataCache. This fact is used for simplifiying code.
+fetchMethods =
+  fetchTwitter: (start, end) ->
+    return fetch(TwitterData, start, end, true, false, false, {fields: {timestamp: 1, followers_count: 1, statuses_count: 1}})
+
+  fetchMailchimp: (start, end) ->
+    return fetch(MailchimpData, start, end, true, false, false, {fields: {timestamp: 1, stats_member_count: 1}})
+
+  fetchGoogle: (start, end) ->
+    return fetch(GoogleData, start, end, true, true, true, {fields: {timestamp: 1, 'ga:hits': 1, 'ga:sessions': 1}})
+
+  fetchGithub: (start, end) ->
+    return fetch(GithubData, start, end, true, false, false, {fields: {timestamp: 1, stargazers_count: 1, subscribers_count: 1}})
+
+  fetchSandstorm: (start, end) ->
+    return fetch(SandstormData, start, end, false, false, false)
+
+  fetchDemoSandstorm: (start, end) ->
+    return fetch(DemoSandstormData, start, end, false, false, false)
+
+  fetchOasisSandstorm: (start, end) ->
+    return fetch(OasisSandstormData, start, end, false, false, false)
+
+  fetchLog: (start, end) ->
+    filter =
+      ip: {"$nin": Meteor.settings.logFilter.ips}
+      client: {"$nin": Meteor.settings.logFilter.user_agents}
+    return fetch(LogData, start, end, true, true, true, {fields: {timestamp: 1, type: 1}, filter: filter})
+
+  fetchPreorders: (start, end) ->
+    return fetch(Preorders, start, end, true, false, false)
+
+  fetchOasisMonitorData: ->
+    filter = {grainTitleResponsMs: {"$exists": true}, timestamp: {$gt: new Date(new Date().getTime() - 86400000)}}
+    return fetch(OasisMonitorData, null, null, false, false, false, {filter: filter})
+
+  fetchSandstormUserData: (start, end) ->
+    return fetch(SandstormUserData, start, end, true, true, true)
+
+dataCache = {}
+@populateCache = ->
+  for key, func of fetchMethods
+    source = key.replace('fetch', '')
+    dataCache[source] = func()
+
 Meteor.methods
   updateDashboard: (data) ->
     unless userIsAdmin(Meteor.user())
@@ -184,69 +231,64 @@ Meteor.methods
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(TwitterData, start, end, true, false, false, {fields: {timestamp: 1, followers_count: 1, statuses_count: 1}})
+    return dataCache.Twitter or fetchMethods.fetchTwitter(start, end)
 
   fetchMailchimp: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(MailchimpData, start, end, true, false, false, {fields: {timestamp: 1, stats_member_count: 1}})
+    return dataCache.Mailchimp or fetchMethods.fetchMailchimp(start, end)
 
   fetchGoogle: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(GoogleData, start, end, true, true, true, {fields: {timestamp: 1, 'ga:hits': 1, 'ga:sessions': 1}})
+    return dataCache.Google or fetchMethods.fetchGoogle(start, end)
 
   fetchGithub: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(GithubData, start, end, true, false, false, {fields: {timestamp: 1, stargazers_count: 1, subscribers_count: 1}})
+      return dataCache.Github or fetchMethods.fetchGithub(start, end)
 
   fetchSandstorm: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(SandstormData, start, end, false, false, false)
+    return dataCache.Sandstorm or fetchMethods.fetchSandstorm(start, end)
 
   fetchDemoSandstorm: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(DemoSandstormData, start, end, false, false, false)
+    return dataCache.DemoSandstorm or fetchMethods.fetchDemoSandstorm(start, end)
 
   fetchOasisSandstorm: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(OasisSandstormData, start, end, false, false, false)
+    return dataCache.OasisSandstorm or fetchMethods.fetchOasisSandstorm(start, end)
 
   fetchLog: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    filter =
-      ip: {"$nin": Meteor.settings.logFilter.ips}
-      client: {"$nin": Meteor.settings.logFilter.user_agents}
-    return fetch(LogData, start, end, true, true, true, {fields: {timestamp: 1, type: 1}, filter: filter})
+    return dataCache.Log or fetchMethods.fetchLog(start, end)
 
   fetchPreorders: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(Preorders, start, end, true, false, false)
+    return dataCache.Preorders or fetchMethods.fetchPreorders(start, end)
 
   fetchOasisMonitorData: ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    filter = {grainTitleResponsMs: {"$exists": true}, timestamp: {$gt: new Date(new Date().getTime() - 86400000)}}
-    return fetch(OasisMonitorData, null, null, false, false, false, {filter: filter})
+    return dataCache.OasisMonitorData or fetchMethods.fetchOasisMonitorData(start, end)
 
   fetchSandstormUserData: (start, end) ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
-    return fetch(SandstormUserData, start, end, true, true, true)
-
+    return dataCache.sandstormUserData or fetchMethods.fetchSandstormUserData(start, end)
