@@ -71,6 +71,11 @@ isNumber = (n) ->
             total += 1
           return total
         total = 0
+        newData["count_install_v2"] = _.map newData['type'], (val) ->
+          if val == 'install_v2'
+            total += 1
+          return total
+        total = 0
         newData["count_startup"] = _.map newData['type'], (val) ->
           if val == 'startup'
             total += 1
