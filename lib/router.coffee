@@ -101,7 +101,6 @@ requireAdmin = (pause) ->
   if Meteor.user()
     if userIsAdmin(Meteor.user())
       @next()
-      return
     else
       @render "accessDenied"
   else
@@ -109,14 +108,7 @@ requireAdmin = (pause) ->
       @render @loadingTemplate
     else
       @render "accessDenied"
-  pause()
 
 nonMeteorRoutes = ['uploadLog', 'uploadSandcats']
 
-Router.onBeforeAction "loading", {except: nonMeteorRoutes}
 Router.onBeforeAction requireAdmin, {except: nonMeteorRoutes}
-Router.onBeforeAction( ->
-  clearErrors()
-  @next()
-, {except: nonMeteorRoutes})
-
