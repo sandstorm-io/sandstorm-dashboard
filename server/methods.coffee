@@ -297,3 +297,9 @@ Meteor.methods
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
 
     return dataCache.sandstormUserData or fetchMethods.fetchSandstormUserData(start, end)
+
+  populateCache: () ->
+    unless userIsAdmin(Meteor.user())
+      throw new Meteor.Error(403, "Unauthorized", "Must be admin")
+
+    populateCache()
