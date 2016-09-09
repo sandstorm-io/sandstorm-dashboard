@@ -76,6 +76,7 @@
     newRow.plansPaidUsers = newRow.plansStandard + newRow.plansBasic + newRow.plansLarge + newRow.plansMega
     newRow.totalUsers = row.forever?.activeUsers or 0
     newRow.dailySharedUsers = 0
+    newRow.totalCharges = row.totalCharges
     if row.daily.apps
       for key, val of row.daily.apps
         newRow.dailySharedUsers += val.sharedUsers or 0
