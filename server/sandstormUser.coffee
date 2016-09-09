@@ -10,15 +10,11 @@ token = urlParts[1]
   rows = data.data
   res = []
   for row in rows
-    newRow = {}
-    newRow._id = row._jd_id
-    newRow.timestamp = Date.parse row._jd_timestamp
-    newRow.dailyActiveUsers = row.daily.activeUsers
-    newRow.dailyActiveGrains = row.daily.activeGrains
-    newRow.monthlyActiveUsers = row.monthly.activeUsers
-    newRow.monthlyActiveGrains = row.monthly.activeGrains
-    newRow.serverAge = row.serverAge
-    res.push newRow
+    row._id = row._jd_id
+    row.timestamp = Date.parse row._jd_timestamp
+    delete row["_jd_id"]
+    delete row["_jd_timestamp"]
+    res.push row
 
   return res
 
