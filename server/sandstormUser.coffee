@@ -13,6 +13,7 @@ token = urlParts[1]
     newRow = {}
     newRow._id = row._jd_id
     newRow.timestamp = Date.parse row._jd_timestamp
+    newRow.ip = Date.parse row._jd_ip
     newRow.dailyActiveUsers = row.daily.activeUsers
     newRow.dailyActiveGrains = row.daily.activeGrains
     newRow.monthlyActiveUsers = row.monthly.activeUsers
