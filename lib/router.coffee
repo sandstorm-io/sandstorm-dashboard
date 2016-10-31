@@ -109,6 +109,6 @@ requireAdmin = (pause) ->
     else
       @render "accessDenied"
 
-nonMeteorRoutes = ['uploadLog', 'uploadSandcats']
+nonMeteorRoutes = ['uploadLog', 'uploadSandcats', 'fetchDemo', 'fetchTrials']
 
 Router.onBeforeAction requireAdmin, {except: nonMeteorRoutes}
