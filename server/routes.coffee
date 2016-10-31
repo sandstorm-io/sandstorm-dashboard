@@ -1,4 +1,4 @@
-Meteor.methods ->
+Meteor.methods
   generateApiToken: ->
     unless userIsAdmin(Meteor.user())
       throw new Meteor.Error(403, "Unauthorized", "Must be admin")
