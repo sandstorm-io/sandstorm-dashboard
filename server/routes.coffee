@@ -17,7 +17,7 @@ Router.route('/fetchDemo', () ->
     res.end("Unauthorized")
     return
 
-  demoData = OasisSandstormData.find({}, {fields: {dailyDemoUsers: 1, dailyAppDemoUsers: 1}}).fetch()
+  demoData = OasisSandstormData.find({}, {fields: {timestamp: 1, dailyDemoUsers: 1, dailyAppDemoUsers: 1}}).fetch()
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify({result: demoData}));
 , {where: 'server'})
